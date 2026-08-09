@@ -5,32 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>しゅんのサバイバルサーバー</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #121212;
-            color: #f0f0f0;
+            font-family: 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+            background-color: #121216;
+            color: #e2e8f0;
             line-height: 1.6;
         }
 
         header {
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), #1f2937;
+            background: linear-gradient(135deg, rgba(16, 24, 39, 0.95), rgba(31, 41, 55, 0.95)), 
+                        radial-gradient(circle, rgba(34, 197, 94, 0.1) 0%, rgba(0,0,0,0) 70%);
             text-align: center;
-            padding: 60px 20px;
+            padding: 60px 20px 40px;
             border-bottom: 4px solid #22c55e;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
 
         h1 {
             color: #ffffff;
             font-size: 2.8em;
             margin: 0 0 10px 0;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 10px rgba(34, 197, 94, 0.3);
         }
 
         .subtitle {
-            font-size: 1.2em;
+            font-size: 1.1em;
             color: #86efac;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
+            font-weight: 500;
         }
 
         .container {
@@ -44,12 +53,12 @@
             justify-content: center;
             gap: 15px;
             flex-wrap: wrap;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .btn {
             padding: 14px 28px;
-            font-size: 1.1em;
+            font-size: 1.05em;
             font-weight: bold;
             color: #ffffff;
             background-color: #22c55e;
@@ -57,89 +66,194 @@
             border-radius: 8px;
             cursor: pointer;
             text-decoration: none;
-            transition: background-color 0.2s, transform 0.1s;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn:hover {
             background-color: #16a34a;
             transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(34, 197, 94, 0.4);
         }
 
         .btn-discord {
             background-color: #5865f2;
+            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
         }
 
         .btn-discord:hover {
             background-color: #4752c4;
+            box-shadow: 0 6px 16px rgba(88, 101, 242, 0.4);
         }
 
         .card {
             background-color: #1e1e24;
             padding: 24px;
-            border-radius: 10px;
+            border-radius: 12px;
             margin-bottom: 24px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid #2a2a35;
         }
 
         .card h2 {
             margin-top: 0;
-            color: #22c55e;
-            font-size: 1.5em;
-            border-bottom: 2px solid #333;
-            padding-bottom: 8px;
+            color: #4ade80;
+            font-size: 1.4em;
+            border-bottom: 2px solid #2a2a35;
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
+        /* ステータスバッジのスタイル */
         .status-badge {
             display: inline-block;
-            padding: 6px 12px;
-            background-color: #22c55e;
-            color: #000;
+            padding: 6px 16px;
             font-weight: bold;
             border-radius: 20px;
             font-size: 0.9em;
+            transition: all 0.3s ease;
         }
 
-        .plugin-list {
-            list-style: none;
-            padding: 0;
+        .status-online {
+            background-color: #166534;
+            color: #4ade80;
+            border: 1px solid #22c55e;
         }
 
-        .plugin-list li {
-            background: #2a2a35;
-            margin-bottom: 10px;
-            padding: 12px 16px;
+        .status-maintenance {
+            background-color: #854d0e;
+            color: #fde047;
+            border: 1px solid #eab308;
+        }
+
+        .status-offline {
+            background-color: #991b1b;
+            color: #fca5a5;
+            border: 1px solid #ef4444;
+        }
+
+        /* 管理者用ステータス切り替えパネル */
+        .admin-panel {
+            background-color: #18181c;
+            border: 1px dashed #4b5563;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .admin-panel label {
+            font-size: 0.9em;
+            color: #9ca3af;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .status-btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .status-btn {
+            padding: 6px 14px;
+            font-size: 0.85em;
             border-radius: 6px;
+            border: 1px solid #4b5563;
+            background-color: #27272a;
+            color: #ccc;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .status-btn:hover {
+            background-color: #3f3f46;
+            color: #fff;
+        }
+
+        /* プラグインリスト */
+        .plugin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .plugin-item {
+            background: #252530;
+            padding: 16px;
+            border-radius: 8px;
             border-left: 4px solid #3b82f6;
         }
 
         .plugin-name {
             font-weight: bold;
             color: #60a5fa;
+            font-size: 1.1em;
+            margin-bottom: 6px;
+        }
+
+        .plugin-desc {
+            font-size: 0.9em;
+            color: #9ca3af;
+        }
+
+        /* ワールドマップ一覧 */
+        .world-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .world-card {
+            background-color: #252530;
+            padding: 14px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+
+        .world-icon {
+            font-size: 1.8em;
+            margin-bottom: 4px;
+        }
+
+        .world-title {
+            font-weight: bold;
+            color: #f3f4f6;
         }
 
         footer {
             text-align: center;
-            padding: 20px;
-            background-color: #0a0a0c;
-            color: #777;
-            font-size: 0.9em;
+            padding: 24px;
+            background-color: #0b0b0e;
+            color: #6b7280;
+            font-size: 0.85em;
+            border-top: 1px solid #1f1f2e;
         }
 
+        /* 通知トースト */
         #toast {
             visibility: hidden;
-            min-width: 220px;
-            background-color: #333;
+            min-width: 250px;
+            background-color: #1e293b;
             color: #fff;
             text-align: center;
-            border-radius: 6px;
-            padding: 12px 20px;
+            border-radius: 8px;
+            padding: 14px 20px;
             position: fixed;
             z-index: 100;
             left: 50%;
             bottom: 30px;
             transform: translateX(-50%);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
             border: 1px solid #22c55e;
+            font-weight: 500;
         }
 
         #toast.show {
@@ -155,7 +269,7 @@
 
     <header>
         <h1>しゅんのサバイバルサーバー</h1>
-        <div class="subtitle">Minecraft Java Edition 専用サバイバルサーバー</div>
+        <div class="subtitle">【Java版】マルチワールド対応・コミュニティ型サバイバル</div>
         
         <div class="btn-group">
             <button class="btn" onclick="copyIP()">📋 サーバーIPをコピー</button>
@@ -165,52 +279,83 @@
 
     <div class="container">
         
-        <!-- 追加機能1: リアルタイムサーバー状態・基本情報 -->
+        <!-- 追加機能1：リアルタイムステータス ＆ 切り替えコントローラー -->
         <div class="card">
-            <h2>📡 サーバー基本情報</h2>
-            <p><strong>接続IP:</strong> <code>atoms-jail.tun.ply.gg</code></p>
-            <p><strong>対応エディション:</strong> Java Edition</p>
-            <p><strong>稼働状況:</strong> <span class="status-badge">🟢 オンライン稼働中</span></p>
+            <h2>📡 サーバーリアルタイム情報</h2>
+            <p><strong>接続アドレス:</strong> <code style="background:#27272a; padding:3px 8px; border-radius:4px; color:#a7f3d0;">atoms-jail.tun.ply.gg</code></p>
+            <p><strong>対応エディション:</strong> Minecraft Java Edition</p>
+            <p>
+                <strong>稼働状況:</strong> 
+                <span id="serverStatusBadge" class="status-badge status-online">🟢 オンライン稼働中</span>
+            </p>
+            <p id="statusMessage" style="color: #9ca3af; font-size: 0.9em;">
+                現在サーバーは正常に稼働しています。どなたでもご自由に参加いただけます！
+            </p>
+
+            <!-- 状態変更パネル（コントロール用） -->
+            <div class="admin-panel">
+                <label>⚙️ ステータス切り替えテスト（表示の確認用）:</label>
+                <div class="status-btn-group">
+                    <button class="status-btn" onclick="setStatus('online')">🟢 オンライン</button>
+                    <button class="status-btn" onclick="setStatus('maintenance')">🟡 メンテナンス中</button>
+                    <button class="status-btn" onclick="setStatus('offline')">🔴 オフライン</button>
+                </div>
+            </div>
         </div>
 
-        <!-- 導入プラグイン3選 -->
+        <!-- 導入プラグイン3種 -->
         <div class="card">
-            <h2>🔌 導入中の主要プラグイン (3選)</h2>
-            <ul class="plugin-list">
-                <li>
-                    <span class="plugin-name">DiscordSRV</span><br>
-                    マイクラ内のゲームチャットとDiscordコミュニティがリアルタイムで同期されます。ゲーム外からでも会話に参加可能です。
-                </li>
-                <li>
-                    <span class="plugin-name">Multiverse-Core</span><br>
-                    複数のワールド管理システム。メインサバイバルワールド以外にも、資源採掘用ワールドなどを安全に運用しています。
-                </li>
-                <li>
-                    <span class="plugin-name">Multiverse-Portals</span><br>
-                    世界同士を繋ぐポータル機能。ゲートに入るだけで、ワールド間をシームレスかつ簡単に移動できます。
-                </li>
-            </ul>
+            <h2>🔌 導入プラグイン (3選)</h2>
+            <div class="plugin-grid">
+                <div class="plugin-item">
+                    <div class="plugin-name">DiscordSRV</div>
+                    <div class="plugin-desc">マイクラ内のゲームチャットと公式Discordがリアルタイム連携！ゲーム外からでも仲間と会話が可能です。</div>
+                </div>
+                <div class="plugin-item">
+                    <div class="plugin-name">Multiverse-Core</div>
+                    <div class="plugin-desc">複数の独立したワールドを安全に管理。メインサバイバルと採掘専用ワールドを分けて運用しています。</div>
+                </div>
+                <div class="plugin-item">
+                    <div class="plugin-name">Multiverse-Portals</div>
+                    <div class="plugin-desc">ゲーム内に設置されたポータル（ゲート）に入るだけで、コマンドなしで別ワールドへ簡単に移動できます。</div>
+                </div>
+            </div>
         </div>
 
-        <!-- 追加機能2: サーバー参加ガイド＆ルール -->
+        <!-- 追加機能2：ワールド＆環境案内マップ -->
         <div class="card">
-            <h2>📜 参加ガイド & ルール</h2>
-            <ol>
-                <li><strong>ルールを守ってプレイ:</strong> 他のプレイヤーの建築物を破壊（荒らし）したり、アイテムを盗む行為は禁止です。</li>
-                <li><strong>Discordへの参加推奨:</strong> 最新のお知らせやアップデート情報、お問い合わせはDiscordサーバーにて対応しています。</li>
-                <li><strong>接続方法:</strong> Java版のマルチプレイ画面から「サーバーを追加」を選び、上記のIPを入力して参加してください！</li>
-            </ol>
+            <h2>🗺️ ワールド案内 (Multiverse & Portals)</h2>
+            <p style="font-size: 0.9em; color:#9ca3af;">専用ポータルを使って以下のワールドを自由に行き来できます：</p>
+            <div class="world-grid">
+                <div class="world-card">
+                    <div class="world-icon">🏠</div>
+                    <div class="world-title">メインワールド</div>
+                    <div style="font-size:0.8em; color:#aaa;">建築＆生活の拠点</div>
+                </div>
+                <div class="world-card">
+                    <div class="world-icon">⛏️</div>
+                    <div class="world-title">資源ワールド</div>
+                    <div style="font-size:0.8em; color:#aaa;">定期リセットで採掘し放題</div>
+                </div>
+                <div class="world-card">
+                    <div class="world-icon">🌌</div>
+                    <div class="world-title">ネザー / エンド</div>
+                    <div style="font-size:0.8em; color:#aaa;">探検・冒険エリア</div>
+                </div>
+            </div>
         </div>
 
     </div>
 
     <footer>
-        &copy; 2026 しゅんのサバイバルサーバー | IP: atoms-jail.tun.ply.gg
+        &copy; 2026 しゅんのサバイバルサーバー | Server IP: atoms-jail.tun.ply.gg
     </footer>
 
+    <!-- IPコピー時の通知トースト -->
     <div id="toast">IPアドレスをコピーしました！</div>
 
     <script>
+        // IPコピー機能
         function copyIP() {
             const ip = "atoms-jail.tun.ply.gg";
             navigator.clipboard.writeText(ip).then(() => {
@@ -222,6 +367,26 @@
             }).catch(() => {
                 alert("コピーに失敗しました。手動でコピーしてください: " + ip);
             });
+        }
+
+        // ステータス変更機能
+        function setStatus(type) {
+            const badge = document.getElementById("serverStatusBadge");
+            const msg = document.getElementById("statusMessage");
+
+            if (type === 'online') {
+                badge.className = "status-badge status-online";
+                badge.textContent = "🟢 オンライン稼働中";
+                msg.textContent = "現在サーバーは正常に稼働しています。どなたでもご自由に参加いただけます！";
+            } else if (type === 'maintenance') {
+                badge.className = "status-badge status-maintenance";
+                badge.textContent = "🟡 メンテナンス中";
+                msg.textContent = "現在サーバーはメンテナンス中です。作業完了までしばらくお待ちください。";
+            } else if (type === 'offline') {
+                badge.className = "status-badge status-offline";
+                badge.textContent = "🔴 オフライン";
+                msg.textContent = "現在サーバーは停止中です。再開予定はDiscordにてお知らせします。";
+            }
         }
     </script>
 </body>
