@@ -1,204 +1,521 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>しゅんのサバイバルサーバー 公式HP</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <title>しゅんのサバイバルサーバー [Java版]</title>
     <style>
-        body { background-color: #121212; color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .hero { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=1200') center/cover; padding: 80px 0; border-bottom: 3px solid #28a745; }
-        .card { background-color: #1e1e1e; border: 1px solid #333; color: #fff; margin-bottom: 20px; }
-        .status-online { color: #28a745; font-weight: bold; }
-        .status-offline { color: #dc3545; font-weight: bold; }
-        .ip-box { background: #2a2a2a; padding: 10px 20px; border-radius: 8px; border: 1px dashed #28a745; cursor: pointer; }
+        :root {
+            --bg-dark: #0f111a;
+            --card-bg: #1a1d2d;
+            --primary-green: #2ecc71;
+            --primary-green-hover: #27ae60;
+            --discord-blue: #5865F2;
+            --discord-blue-hover: #4752C4;
+            --text-main: #ffffff;
+            --text-muted: #a0a5b5;
+            --accent-gold: #f1c40f;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px 15px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0 20px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--primary-green);
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        header .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        .badge-java {
+            display: inline-block;
+            background: #e74c3c;
+            color: #fff;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        /* ヒーローセクション（IPコピー & Discord） */
+        .hero-card {
+            background: var(--card-bg);
+            border: 1px solid #2a2f45;
+            border-radius: 16px;
+            padding: 30px 20px;
+            text-align: center;
+            margin: 30px 0 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .ip-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin: 20px auto;
+            max-width: 500px;
+            background: #090a10;
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: 2px dashed var(--primary-green);
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .ip-wrapper:hover {
+            transform: translateY(-2px);
+            background: #121420;
+        }
+
+        .ip-address {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-green);
+            flex-grow: 1;
+            word-break: break-all;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-copy {
+            background-color: var(--primary-green);
+            color: #fff;
+        }
+
+        .btn-copy:hover {
+            background-color: var(--primary-green-hover);
+        }
+
+        .btn-discord {
+            background-color: var(--discord-color, var(--discord-blue));
+            color: #fff;
+            margin-top: 15px;
+        }
+
+        .btn-discord:hover {
+            background-color: var(--discord-blue-hover);
+        }
+
+        /* 特徴 & プラグイン 20選 グリッド */
+        .section-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #2a2f45;
+            padding-bottom: 10px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #2a2f45;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary-green);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .card-number {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: var(--accent-gold);
+            background: rgba(241, 196, 15, 0.1);
+            padding: 2px 8px;
+            border-radius: 6px;
+        }
+
+        .plugin-tag {
+            font-size: 0.75rem;
+            background: #2a2f45;
+            color: var(--text-muted);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.15rem;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .feature-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* コピー通知トースト */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: var(--primary-green);
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 12px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid #2a2f45;
+        }
     </style>
 </head>
 <body>
 
-    <!-- 1. ヘッダーナビゲーション -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top border-bottom border-secondary">
-        <div class="container">
-            <a class="navbar-brand fw-bold text-success" href="#">🌿 しゅんのサバイバル</a>
-            <div class="ms-auto">
-                <a href="{{ discord_url }}" target="_blank" class="btn btn-outline-primary btn-sm"><i class="bi bi-discord"></i> 公式Discord</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- ヒーローセクション -->
-    <header class="hero text-center mb-5">
-        <div class="container">
-            <h1 class="display-4 fw-bold">しゅんのサバイバルサーバーへようこそ！</h1>
-            <p class="lead">自由度満点のサバイバルワールドで仲間と一緒に暮らそう！</p>
-            
-            <!-- 2. ワンクリックIPコピー -->
-            <div class="d-inline-block mt-3">
-                <div class="ip-box" onclick="copyIP()">
-                    <span class="me-2"><i class="bi bi-terminal"></i> IP: <strong id="serverIP">{{ server_ip }}</strong></span>
-                    <span class="badge bg-success" id="copyBadge">クリックでコピー</span>
-                </div>
-            </div>
-        </div>
-    </header>
-
     <div class="container">
-        <div class="row">
-            <!-- メインコンテンツ -->
-            <div class="col-lg-8">
-                
-                <!-- 3. リアルタイムステータスモニター -->
-                <div class="card p-4">
-                    <h3 class="h5 border-bottom pb-2"><i class="bi bi-activity"></i> サーバーリアルタイム状態</h3>
-                    <div class="row text-center mt-3">
-                        <div class="col-md-3">
-                            <h6>ステータス</h6>
-                            <p id="statusText" class="fs-5">取得中...</p>
-                        </div>
-                        <div class="col-md-3">
-                            <h6>オンライン人数</h6>
-                            <p id="playerCount" class="fs-5">- / -</p>
-                        </div>
-                        <div class="col-md-3">
-                            <h6>バージョン</h6>
-                            <p id="serverVersion" class="fs-5">-</p>
-                        </div>
-                        <div class="col-md-3">
-                            <h6>MOTD</h6>
-                            <p id="serverMotd" class="small text-muted">-</p>
-                        </div>
-                    </div>
-                </div>
+        <!-- ヘッダー -->
+        <header>
+            <h1>しゅんのサバイバルサーバー</h1>
+            <p class="subtitle">快適で機能満載！Java版で遊べる本格サバイバルサーバー</p>
+            <span class="badge-java">Minecraft Java Edition 専用</span>
+        </header>
 
-                <!-- 4. オンラインプレイヤー一覧 -->
-                <div class="card p-4">
-                    <h3 class="h5 border-bottom pb-2"><i class="bi bi-people"></i> 現在参加中のプレイヤー</h3>
-                    <ul id="playerList" class="list-group list-group-flush mt-2">
-                        <li class="list-group-item bg-transparent text-muted">取得中...</li>
-                    </ul>
-                </div>
+        <!-- メインヒーロー（IPコピー & Discord） -->
+        <div class="hero-card">
+            <h2>サーバーに今すぐ参加しよう！</h2>
+            <p style="color: var(--text-muted); margin-top: 5px;">IPアドレスをクリックしてコピーし、マルチプレイから追加してください。</p>
 
-                <!-- 5. 参加方法ガイド -->
-                <div class="card p-4">
-                    <h3 class="h5 border-bottom pb-2"><i class="bi bi-controller"></i> サーバー参加手順</h3>
-                    <ol class="mt-2">
-                        <li>Minecraft Java Edition を起動</li>
-                        <li>「マルチプレイ」 ➔ 「サーバーを追加」をクリック</li>
-                        <li>サーバーアドレスに <code>{{ server_ip }}</code> を入力して完了！</li>
-                    </ol>
-                </div>
-
-                <!-- 6. サーバー独自機能・システム紹介 -->
-                <div class="card p-4">
-                    <h3 class="h5 border-bottom pb-2"><i class="bi bi-star"></i> 主なサーバー機能</h3>
-                    <div class="row g-3 mt-1">
-                        <div class="col-md-6"><i class="bi bi-shield-check text-success"></i> opしか触れない土地保護プラグイン搭載</div>
-                        <div class="col-md-6"><i class="bi bi-cash-coin text-warning"></i> ぜひさんかしてください</div>
-                        <div class="col-md-6"><i class="bi bi-shop text-info"></i> いろんなプラグイン入ってます</div>
-                        <div class="col-md-6"><i class="bi bi-tree text-primary"></i> discordsrv</div>
-                    </div>
-                </div>
-
-                <!-- 7. サーバー規約 & ニュース -->
-                <div class="card p-4">
-                    <h3 class="h5 border-bottom pb-2"><i class="bi bi-exclamation-triangle"></i> サーバー規約・お知らせ</h3>
-                    <ul class="mb-0">
-                        <li>他人の建造物の破壊・窃盗行為は厳禁です。</li>
-                        <li>チートMODや悪質なバグ利用は即座にBAN対象となります。</li>
-                        <li>皆で楽しく遊ぶためにマナーを守りましょう！</li>
-                    </ul>
-                </div>
-
+            <div class="ip-wrapper" onclick="copyIP('atoms-jail.tun.ply.gg')" title="クリックでIPをコピー">
+                <span class="ip-address" id="server-ip">atoms-jail.tun.ply.gg</span>
+                <button class="btn btn-copy">コピー</button>
             </div>
 
-            <!-- サイドバー -->
-            <div class="col-lg-4">
-                
-                <!-- 8. Discord コミュニティリンク widget -->
-                <div class="card p-4 text-center">
-                    <h4 class="h5"><i class="bi bi-discord text-primary"></i> 公式Discord</h4>
-                    <p class="small text-muted">イベント情報やお問い合わせ、仲間との通話はこちら！</p>
-                    <a href="{{ discord_url }}" target="_blank" class="btn btn-primary w-100">Discordに参加する</a>
-                </div>
-
-                <!-- 9. 運営チーム一覧 -->
-                <div class="card p-4">
-                    <h4 class="h5 border-bottom pb-2"><i class="bi bi-person-badge"></i> 運営メンバー</h4>
-                    <ul class="list-unstyled mb-0">
-                        <li>👑 <strong>しゅん (Shun)</strong> - サーバー主</li>
-                        <li>🛡️ <strong>Mod Team</strong> - モデレーター募集枠</li>
-                    </ul>
-                </div>
-
-                <!-- 10. Webマップ / 関連リンク -->
-                <div class="card p-4">
-                    <h4 class="h5 border-bottom pb-2"><i class="bi bi-map"></i> 関連リンク</h4>
-                    <a href="#" class="btn btn-outline-light btn-sm w-100 mb-2 disabled">Dynmap (準備中)</a>
-                    <a href="#" class="btn btn-outline-light btn-sm w-100 disabled">公式Wiki (準備中)</a>
-                </div>
-
-                <!-- 11. FAQ / よくある質問 -->
-                <div class="card p-4">
-                    <h4 class="h5 border-bottom pb-2"><i class="bi bi-question-circle"></i> FAQ</h4>
-                    <p class="small mb-1"><strong>Q. 統合版(Switch/スマホ)から入れますか？</strong></p>
-                    <p class="small text-muted">A. 現在Java版対応ですが、詳細設定はDiscordで案内中です。</p>
-                </div>
-
-                <!-- 12. 投票・支援リンク -->
-                <div class="card p-4 text-center">
-                    <h4 class="h5"><i class="bi bi-heart-fill text-danger"></i> サーバー応援</h4>
-                    <p class="small text-muted">JAPAN MINECRAFT MONSTERSでの投票をお願いします！</p>
-                    <button class="btn btn-outline-warning btn-sm w-100" onclick="alert('投票リンク準備中！')">JMMで投票する</button>
-                </div>
-
+            <div>
+                <a href="https://discord.gg/MQsMCftBpx" target="_blank" class="btn btn-discord">
+                    公式Discordサーバーに参加する
+                </a>
             </div>
+        </div>
+
+        <!-- サーバー機能・導入プラグイン 20選 -->
+        <h2 class="section-title">サーバーの特徴 & 導入プラグイン 20選</h2>
+
+        <div class="features-grid">
+
+            <div class="feature-card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-number">#01</span>
+                        <span class="plugin-tag">システム</span>
+                    </div>
+                    <h3>ワンタップIPコピー</h3>
+                    <p>Webサイトから一瞬でIPアドレスをクリップボードにコピーしてマイクラに貼り付け可能！</p>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-number">#02</span>
+                        <span class="plugin-tag">DiscordSRV</span>
+                    </div>
+                    <h3>Discordリアルタイム連携</h3>
+                    <p>マイクラ内のチャットとDiscordのテキストチャンネルが相互に同期。離れていても会話に参加可能。</p>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-number">#03</span>
+                        <span class="plugin-tag">GriefPrevention</span>
+                    </div>
+                    <h3>土地保護プラグイン</h3>
+                    <p>金のクワを使って簡単に自分の土地やチェストを保護！荒らしの心配なく建築を楽しめます。</p>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-number">#04</span>
+                        <span class="plugin-tag">Vault / ChestShop</span>
+                    </div>
+                    <h3>経済＆プレイヤーショップ</h3>
+                    <p>サーバー内通貨を使った経済システム。チェストショップを建てて自分のアイテムを売り買いできます。</p>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-number">#05</span>
+                        <span class="plugin-tag">JobsReborn</span>
+                    </div>
+                    <h3>職業（ジョブ）システム</h3>
+                    <p>採掘師・農夫・木こりなどの職業に就くことで、毎日の作業でお金と経験値が溜まります。</p>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-number">#06</span>
+                        <span class="plugin-tag">AuctionHouse</span>
+                    </div>
+                    <h3>オークションハウス</h3>
+                    <p>コマンド1つで全プレイヤーが出品したレアアイテムを競売・定額購入できるマーケット。</p>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-number">#07</span>
+                        <span class="plugin-tag">EssentialsX</span>
+                    </div>
+                    <h3>便利ワープ＆ホーム機能</h3>
+                    <p><code>/sethome</code> で拠点を登録したり、<code>/spawn</code> や <code>/tpa</code> で友達の元へひとっ飛び！</p>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-number">#08</span>
+                        <span class="plugin-tag">mcMMO</span>
+                    </div>
+                    <h3>スキル＆アビリティ</h3>
+                    <p>ブロック破壊や釣りを行うほどスキルレベルが上昇。ドロップ倍率アップや特殊アビリティが解放！</p>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-number">#09</span>
+                        <span class="plugin-tag">Dynmap</span>
+                    </div>
+                    <h3>リアルタイムWEBマップ</h3>
+                    <p>ブラウザ上でサーバー内のワールド構造やプレイヤーの位置をリアルタイムで確認可能。</p>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-number">#10</span>
+                        <span class="plugin-tag">CrazyCrates</span>
+                    </div>
+                    <h3>ガチャ＆クレート機能</h3>
+                    <p>投票やイベントで手に入る「ガチャキー」を使って、特別アイテムが当たるガチャを回そう！</p>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-number">#11</span>
+                        <span class="plugin-tag">AdvancedEnchants</span>
+                    </div>
+                    <h3>カスタムエンチャント</h3>
+                    <p>バニラには存在しない強力でユニークな限定エンチャントが多数実装されています。</p>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-number">#12</span>
+                        <span class="plugin-tag">ChestSort</span>
+                    </div>
+                    <h3>ワンクリック整理</h3>
+                    <p>チェストやインベントリの中身をボタン一つ・一瞬で綺麗な順番に自動整理できます。</p>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-number">#13</span>
+                        <span class="plugin-tag">GSit</span>
+                    </div>
+                    <h3>座る・寝そべるアクション</h3>
+                    <p><code>/sit</code> や <code>/lay</code>、または階段ブロックを右クリックして座れるおしゃれな装飾機能。</p>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-number">#14</span>
+                        <span class="plugin-tag">Harbor</span>
+                    </div>
+                    <h3>1人スリープ（夜スキップ）</h3>
+                    <p>サーバーに複数人がログインしていても、一定割合（1人〜）がベッドに寝れば夜を即スキップ！</p>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-number">#15</span>
+                        <span class="plugin-tag">DailyRewards</span>
+                    </div>
+                    <h3>ログインボーナス</h3>
+                    <p>毎日1回ログインして報酬を受け取ろう！継続して遊ぶほどボーナスが豪華に。</p>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-number">#16</span>
+                        <span class="plugin-tag">Multiverse</span>
+                    </div>
+                    <h3>資源ワールド定期リセット</h3>
+                    <p>建築ワールドを汚さずに素材を採掘できるよう、資源・ネザー・エンド世界を定期リセット！</p>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-number">#17</span>
+                        <span class="plugin-tag">PvPToggle</span>
+                    </div>
+                    <h3>PvP オン/オフ切替</h3>
+                    <p>プレイヤー同士の戦闘（PvP）を自由に切り替え。平和に建築したい人でも安心です。</p>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-number">#18</span>
+                        <span class="plugin-tag">Holograms</span>
+                    </div>
+                    <h3>ホログラム＆ランキング</h3>
+                    <p>スポーン地点に所持金ランキングやレベルランキングを立体ホログラムでリアルタイム表示。</p>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-number">#19</span>
+                        <span class="plugin-tag">Votifier</span>
+                    </div>
+                    <h3>投票ボーナス</h3>
+                    <p>マイクラ投票サイトからサーバーに投票することで、限定コインや特典アイテムを獲得可能。</p>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-number">#20</span>
+                        <span class="plugin-tag">CoreProtect</span>
+                    </div>
+                    <h3>万全のロールバック復旧</h3>
+                    <p>万が一荒らし被害に遭っても、運営チームがブロックの変更履歴を辿って一発で元通りに復旧！</p>
+                </div>
+            </div>
+
         </div>
     </div>
 
+    <!-- コピー完了メッセージ（トースト表示） -->
+    <div id="toast">IPアドレスをコピーしました！</div>
+
+    <footer>
+        <p>&copy; しゅんのサバイバルサーバー All Rights Reserved.</p>
+    </footer>
+
     <script>
-        // IPコピー機能
-        function copyIP() {
-            navigator.clipboard.writeText("{{ server_ip }}");
-            document.getElementById("copyBadge").innerText = "コピーしました！";
-            setTimeout(() => {
-                document.getElementById("copyBadge").innerText = "クリックでコピー";
-            }, 2000);
+        function copyIP(ipText) {
+            navigator.clipboard.writeText(ipText).then(function() {
+                var toast = document.getElementById("toast");
+                toast.classList.add("show");
+                setTimeout(function(){ 
+                    toast.classList.remove("show"); 
+                }, 2500);
+            }).catch(function(err) {
+                console.error('IPのコピーに失敗しました: ', err);
+            });
         }
-
-        // バックエンドからステータス取得
-        async function fetchStatus() {
-            try {
-                const res = await fetch('/api/status');
-                const data = await res.json();
-                
-                const statusEl = document.getElementById('statusText');
-                if (data.online) {
-                    statusEl.innerHTML = '<span class="status-online">● オンライン</span>';
-                    document.getElementById('playerCount').innerText = `${data.players_online} / ${data.players_max}`;
-                    document.getElementById('serverVersion').innerText = data.version;
-                    document.getElementById('serverMotd').innerText = data.motd;
-
-                    // プレイヤーリスト更新
-                    const listEl = document.getElementById('playerList');
-                    if (data.player_list && data.player_list.length > 0) {
-                        listEl.innerHTML = data.player_list.map(p => `<li class="list-group-item bg-transparent text-white"><i class="bi bi-person"></i> ${p}</li>`).join('');
-                    } else {
-                        listEl.innerHTML = '<li class="list-group-item bg-transparent text-muted">現在ログイン中のプレイヤーはいません</li>';
-                    }
-                } else {
-                    statusEl.innerHTML = '<span class="status-offline">● オフライン</span>';
-                    document.getElementById('playerCount').innerText = '0 / 0';
-                    document.getElementById('playerList').innerHTML = '<li class="list-group-item bg-transparent text-muted">サーバーが停止中です</li>';
-                }
-            } catch (err) {
-                document.getElementById('statusText').innerHTML = '<span class="status-offline">取得失敗</span>';
-            }
-        }
-
-        fetchStatus();
-        setInterval(fetchStatus, 30000); // 30秒ごとに更新
     </script>
 </body>
 </html>
