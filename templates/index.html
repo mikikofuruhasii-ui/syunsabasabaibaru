@@ -3,369 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>しゅんのサバイバルサーバー</title>
+    <title>しゅんのサバイバルサーバー | Java Edition</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
-        /* =========================================
-           全体のデザイン設定（ダークテーマ）
-        ========================================= */
-        * { box-sizing: border-box; }
-        body {
-            margin: 0; padding: 0;
-            font-family: 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
-            background-color: #121216; color: #e2e8f0; line-height: 1.6;
-        }
-
-        /* ヘッダー */
-        header {
-            background: linear-gradient(135deg, rgba(16, 24, 39, 0.95), rgba(31, 41, 55, 0.95)), 
-                        radial-gradient(circle, rgba(34, 197, 94, 0.1) 0%, rgba(0,0,0,0) 70%);
-            text-align: center;
-            padding: 60px 20px 40px;
-            border-bottom: 4px solid #22c55e;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-        }
-        h1 {
-            color: #ffffff; font-size: 2.8em; margin: 0 0 10px 0;
-            letter-spacing: 1px; text-shadow: 0 2px 10px rgba(34, 197, 94, 0.3);
-        }
-        .subtitle { font-size: 1.1em; color: #86efac; margin-bottom: 30px; font-weight: 500; }
-
-        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
-
-        /* ボタン群 */
-        .btn-group { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; }
-        .btn {
-            padding: 14px 28px; font-size: 1.05em; font-weight: bold; color: #ffffff;
-            background-color: #22c55e; border: none; border-radius: 8px; cursor: pointer;
-            text-decoration: none; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 8px;
-        }
-        .btn:hover { background-color: #16a34a; transform: translateY(-2px); }
-        .btn-discord { background-color: #5865f2; }
-        .btn-discord:hover { background-color: #4752c4; }
-
-        /* カードデザイン */
-        .card {
-            background-color: #1e1e24; padding: 24px; border-radius: 12px;
-            margin-bottom: 24px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); border: 1px solid #2a2a35;
-        }
-        .card h2 {
-            margin-top: 0; color: #4ade80; font-size: 1.4em; border-bottom: 2px solid #2a2a35;
-            padding-bottom: 10px; display: flex; align-items: center; gap: 10px;
-        }
-
-        /* サーバー状態バッジ */
-        .status-badge {
-            display: inline-block; padding: 6px 16px; font-weight: bold;
-            border-radius: 20px; font-size: 0.9em; transition: all 0.3s ease;
-        }
-        .status-online { background-color: #166534; color: #4ade80; border: 1px solid #22c55e; }
-        .status-maintenance { background-color: #854d0e; color: #fde047; border: 1px solid #eab308; }
-        .status-offline { background-color: #991b1b; color: #fca5a5; border: 1px solid #ef4444; }
-
-        /* お知らせリスト */
-        .news-list { list-style: none; padding: 0; margin: 0; }
-        .news-item { padding: 12px 0; border-bottom: 1px dashed #333; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-        .news-item:last-child { border-bottom: none; }
-        .news-date { color: #9ca3af; font-size: 0.9em; min-width: 90px; }
-        .news-tag { padding: 2px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; }
-        .tag-info { background-color: #1e3a8a; color: #93c5fd; }
-        .tag-update { background-color: #064e3b; color: #6ee7b7; }
-        .tag-event { background-color: #701a75; color: #f0abfc; }
-        .news-text { color: #e2e8f0; flex: 1; }
-
-        /* 管理者パネル (ステータス変更 ＆ お知らせ追加) */
-        .admin-panel {
-            background-color: #18181c; border: 1px dashed #4b5563;
-            padding: 16px; border-radius: 8px; margin-top: 25px;
-        }
-        .admin-panel h3 { color: #9ca3af; font-size: 1.1em; margin: 0 0 15px 0; display: flex; align-items: center; gap: 5px; }
-        .admin-section { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #2a2a35; }
-        .admin-section:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
-        
-        .admin-input {
-            padding: 8px; background-color: #27272a; border: 1px solid #4b5563;
-            color: #fff; border-radius: 4px; font-family: inherit; font-size: 0.9em;
-        }
-        .admin-input:focus { outline: none; border-color: #3b82f6; }
-        
-        .status-btn-group { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-        .admin-btn {
-            padding: 8px 16px; font-size: 0.9em; border-radius: 6px; border: none;
-            background-color: #3f3f46; color: #fff; cursor: pointer; transition: 0.2s; font-weight: bold;
-        }
-        .admin-btn:hover { background-color: #52525b; }
-        .btn-add { background-color: #2563eb; } .btn-add:hover { background-color: #1d4ed8; }
-        .btn-reset { background-color: #dc2626; } .btn-reset:hover { background-color: #b91c1c; }
-
-        /* プラグイン & ワールドリスト */
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-top: 15px; }
-        .grid-item { background: #252530; padding: 16px; border-radius: 8px; }
-        .plugin-item { border-left: 4px solid #3b82f6; }
-        .world-item { text-align: center; border: 1px solid #333; }
-        .item-title { font-weight: bold; color: #f3f4f6; font-size: 1.1em; margin-bottom: 6px; }
-        .plugin-title { color: #60a5fa; }
-        .item-desc { font-size: 0.9em; color: #9ca3af; }
-        .world-icon { font-size: 1.8em; margin-bottom: 4px; }
-
-        footer { text-align: center; padding: 24px; background-color: #0b0b0e; color: #6b7280; font-size: 0.85em; }
-
-        /* 通知トースト */
-        #toast {
-            visibility: hidden; min-width: 250px; background-color: #1e293b; color: #fff; text-align: center;
-            border-radius: 8px; padding: 14px 20px; position: fixed; z-index: 100; left: 50%; bottom: 30px;
-            transform: translateX(-50%); border: 1px solid #22c55e; font-weight: bold;
-        }
-        #toast.show { visibility: visible; animation: fadein 0.3s, fadeout 0.5s 2.2s; }
-        @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 30px; opacity: 1; } }
-        @keyframes fadeout { from { bottom: 30px; opacity: 1; } to { bottom: 0; opacity: 0; } }
+        body { background-color: #121212; color: #e0e0e0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        .hero { background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=1200') center/cover; padding: 100px 0; border-bottom: 4px solid #28a745; }
+        .card { background-color: #1e1e1e; border: 1px solid #333; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .status-online { color: #28a745; font-weight: bold; text-shadow: 0 0 8px rgba(40,167,69,0.5); }
+        .status-offline { color: #dc3545; font-weight: bold; text-shadow: 0 0 8px rgba(220,53,69,0.5); }
+        .ip-box { background: #2a2a2a; padding: 15px 25px; border-radius: 8px; border: 2px dashed #28a745; cursor: pointer; transition: 0.3s; }
+        .ip-box:hover { background: #333; transform: translateY(-2px); }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>しゅんのサバイバルサーバー</h1>
-        <div class="subtitle">【Java版】マルチワールド対応・コミュニティ型サバイバル</div>
-        
-        <div class="btn-group">
-            <button class="btn" onclick="copyIP()">📋 サーバーIPをコピー</button>
-            <a href="https://discord.gg/HXhWvPy8Gx" target="_blank" class="btn btn-discord">💬 Discordに参加</a>
+    <!-- 【機能1】ヘッダーナビゲーション -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top border-bottom border-secondary">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-success" href="#"><i class="bi bi-tree"></i> しゅんのサバイバル</a>
+            <div class="ms-auto">
+                <span class="badge bg-primary me-2">Java Edition 専用</span>
+                <a href="{{ discord_url }}" target="_blank" class="btn btn-outline-primary btn-sm"><i class="bi bi-discord"></i> Discord</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero text-center mb-5">
+        <div class="container">
+            <h1 class="display-4 fw-bold">しゅんのサバイバルサーバー</h1>
+            <p class="lead mt-3">Minecraft Java Edition で広がる無限のサバイバル生活！</p>
+            
+            <!-- 【機能2】ワンクリックIPコピー機能 -->
+            <div class="d-inline-block mt-4">
+                <div class="ip-box" onclick="copyIP()">
+                    <span class="fs-5 me-3"><i class="bi bi-hdd-network"></i> IP: <strong id="serverIP" class="text-white">{{ server_ip }}</strong></span>
+                    <span class="badge bg-success fs-6" id="copyBadge">クリックでコピー</span>
+                </div>
+                <p class="text-muted mt-2 small">※接続には Java Edition が必要です</p>
+            </div>
         </div>
     </header>
 
     <div class="container">
-        
-        <!-- ==============================================
-             お知らせセクション（JavaScriptで動的に生成）
-        =============================================== -->
-        <div class="card">
-            <h2>📢 最新のお知らせ</h2>
-            <ul class="news-list" id="newsList">
-                <!-- ここにJavaScriptでお知らせが追加されます -->
-            </ul>
-        </div>
-
-        <!-- ==============================================
-             サーバー状態 ＆ 管理者コントロールパネル
-        =============================================== -->
-        <div class="card">
-            <h2>📡 サーバーリアルタイム情報</h2>
-            <p><strong>接続アドレス:</strong> <code style="background:#27272a; padding:3px 8px; border-radius:4px; color:#a7f3d0;">atoms-jail.tun.ply.gg</code></p>
-            <p><strong>対応エディション:</strong> Minecraft Java Edition</p>
-            <p>
-                <strong>稼働状況:</strong> 
-                <span id="serverStatusBadge" class="status-badge status-online">🟢 オンライン稼働中</span>
-            </p>
-            <p id="statusMessage" style="color: #9ca3af; font-size: 0.9em;">
-                現在サーバーは正常に稼働しています。どなたでもご自由に参加いただけます！
-            </p>
-
-            <!-- 管理者用パネル（お知らせ追加 ＆ ステータス変更） -->
-            <div class="admin-panel">
-                <h3>🛠️ 管理者コントロールパネル</h3>
+        <div class="row">
+            <div class="col-lg-8">
                 
-                <!-- 機能1: ステータス変更 -->
-                <div class="admin-section">
-                    <label style="color:#9ca3af; font-size:0.9em; display:block; margin-bottom:8px;">サーバー状態の切り替え:</label>
-                    <div class="status-btn-group">
-                        <button class="admin-btn" onclick="setStatus('online')">🟢 オンライン</button>
-                        <button class="admin-btn" onclick="setStatus('maintenance')">🟡 メンテナンス</button>
-                        <button class="admin-btn" onclick="setStatus('offline')">🔴 オフライン</button>
+                <!-- 【機能3】Javaサーバー リアルタイムステータス -->
+                <div class="card p-4">
+                    <h3 class="h5 border-bottom border-secondary pb-2"><i class="bi bi-activity"></i> サーバー稼働ステータス</h3>
+                    <div class="row text-center mt-3">
+                        <div class="col-md-3">
+                            <h6 class="text-muted">状態</h6>
+                            <p id="statusText" class="fs-5 fw-bold">取得中...</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h6 class="text-muted">プレイヤー</h6>
+                            <p id="playerCount" class="fs-5 fw-bold">- / -</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h6 class="text-muted">Javaバージョン</h6>
+                            <p id="serverVersion" class="fs-5 fw-bold">-</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h6 class="text-muted">MOTD</h6>
+                            <p id="serverMotd" class="small">-</p>
+                        </div>
                     </div>
                 </div>
 
-                <!-- 機能2: お知らせ追加フォーム -->
-                <div class="admin-section">
-                    <label style="color:#9ca3af; font-size:0.9em; display:block; margin-bottom:8px;">お知らせの追加 (※お使いのブラウザに保存されます):</label>
-                    <div class="status-btn-group">
-                        <input type="date" id="newsDate" class="admin-input">
-                        <select id="newsTag" class="admin-input">
-                            <option value="tag-info">お知らせ</option>
-                            <option value="tag-update">更新情報</option>
-                            <option value="tag-event">イベント</option>
-                        </select>
-                        <input type="text" id="newsText" class="admin-input" placeholder="お知らせの内容を入力..." style="flex: 1; min-width: 200px;">
-                        <button class="admin-btn btn-add" onclick="addNewNews()">＋ 追加</button>
-                        <button class="admin-btn btn-reset" onclick="resetNews()">リセット</button>
+                <!-- 【機能4】オンラインプレイヤー一覧 -->
+                <div class="card p-4">
+                    <h3 class="h5 border-bottom border-secondary pb-2"><i class="bi bi-people"></i> 現在ログイン中のプレイヤー</h3>
+                    <div id="playerList" class="d-flex flex-wrap gap-2 mt-2">
+                        <span class="text-muted small">取得中...</span>
                     </div>
                 </div>
+
+                <!-- 【機能5】Java Edition 参加手順ガイド -->
+                <div class="card p-4">
+                    <h3 class="h5 border-bottom border-secondary pb-2"><i class="bi bi-controller"></i> サーバーへの入り方</h3>
+                    <ol class="mt-2 text-light">
+                        <li>Minecraft <strong>Java Edition</strong> を起動する</li>
+                        <li>「マルチプレイ」 ➔ 「サーバーを追加」をクリック</li>
+                        <li>サーバーアドレスに <code class="bg-dark px-2 py-1 rounded text-success">{{ server_ip }}</code> を入力</li>
+                        <li>「完了」を押してサーバーに参加！</li>
+                    </ol>
+                </div>
+
+                <!-- 【機能6】サーバー独自機能一覧 -->
+                <div class="card p-4">
+                    <h3 class="h5 border-bottom border-secondary pb-2"><i class="bi bi-star"></i> サーバーの特徴</h3>
+                    <div class="row g-3 mt-1">
+                        <div class="col-md-6"><i class="bi bi-shield-check text-success"></i> <strong>チェスト・土地保護</strong> (荒らし対策済)</div>
+                        <div class="col-md-6"><i class="bi bi-coin text-warning"></i> <strong>独自経済システム</strong> (お金を稼ごう)</div>
+                        <div class="col-md-6"><i class="bi bi-shop text-info"></i> <strong>プレイヤーショップ</strong> (アイテム売買)</div>
+                        <div class="col-md-6"><i class="bi bi-moon-stars text-primary"></i> <strong>睡眠スキップ機能</strong> (1人寝れば朝に)</div>
+                    </div>
+                </div>
+
+                <!-- 【機能7】サーバー規約 -->
+                <div class="card p-4">
+                    <h3 class="h5 border-bottom border-secondary pb-2"><i class="bi bi-exclamation-triangle text-warning"></i> ルール・規約</h3>
+                    <ul class="text-light mb-0">
+                        <li>他人の建築物の破壊、アイテムの窃盗は禁止（ログ確認ですぐバレます）。</li>
+                        <li>X-RayなどのチートMOD、マクロツール等の使用禁止。</li>
+                        <li>チャットでの暴言やスパムなど、他人が不快になる行為の禁止。</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="col-lg-4">
+                
+                <!-- 【機能8】Discord コミュニティ連携 -->
+                <div class="card p-4 text-center border-primary">
+                    <h4 class="h5"><i class="bi bi-discord text-primary"></i> 公式Discordに参加</h4>
+                    <p class="small text-muted mt-2">ホワイトリスト登録や、ボイスチャット、最新のアップデート情報はこちらから！</p>
+                    <a href="{{ discord_url }}" target="_blank" class="btn btn-primary w-100 fw-bold">Discordへ参加する</a>
+                </div>
+
+                <!-- 【機能9】運営チーム一覧 -->
+                <div class="card p-4">
+                    <h4 class="h5 border-bottom border-secondary pb-2"><i class="bi bi-person-badge"></i> 運営メンバー</h4>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><span class="badge bg-danger">Owner</span> <strong>しゅん</strong></li>
+                        <li><span class="badge bg-success">Moderator</span> 募集中</li>
+                    </ul>
+                </div>
+
+                <!-- 【機能10】Webマップ連携 (Dynmap等) -->
+                <div class="card p-4">
+                    <h4 class="h5 border-bottom border-secondary pb-2"><i class="bi bi-map"></i> ワールドマップ</h4>
+                    <p class="small text-muted">ブラウザからリアルタイムでワールドを見られます。</p>
+                    <a href="#" class="btn btn-outline-success btn-sm w-100 disabled">Webマップを開く (準備中)</a>
+                </div>
+
+                <!-- 【機能11】FAQ (Javaサーバー関連) -->
+                <div class="card p-4">
+                    <h4 class="h5 border-bottom border-secondary pb-2"><i class="bi bi-question-circle"></i> よくある質問</h4>
+                    <div class="mb-2">
+                        <span class="badge bg-secondary">Q</span> <span class="small fw-bold">統合版(スマホ/Switch)から入れる？</span>
+                        <p class="small text-muted mt-1 mb-0">A. 現在はJava Edition専用となっています。</p>
+                    </div>
+                    <div>
+                        <span class="badge bg-secondary">Q</span> <span class="small fw-bold">MODは入れてもいい？</span>
+                        <p class="small text-muted mt-1 mb-0">A. 軽量化MODやミニマップのみ許可しています。</p>
+                    </div>
+                </div>
+
+                <!-- 【機能12】投票・支援機能 -->
+                <div class="card p-4 text-center">
+                    <h4 class="h5"><i class="bi bi-heart-fill text-danger"></i> サーバーを応援</h4>
+                    <p class="small text-muted">Japan Minecraft Serversで投票して報酬をゲット！</p>
+                    <button class="btn btn-outline-warning btn-sm w-100" onclick="alert('JMS投票ページへ移動します（リンク準備中）')">サーバーに投票する</button>
+                </div>
+
             </div>
         </div>
-
-        <!-- ==============================================
-             プラグイン & ワールド紹介
-        =============================================== -->
-        <div class="card">
-            <h2>🔌 導入プラグイン (3選)</h2>
-            <div class="grid-container">
-                <div class="grid-item plugin-item">
-                    <div class="item-title plugin-title">DiscordSRV</div>
-                    <div class="item-desc">ゲーム内チャットとDiscordが連携！ゲーム外からでも仲間と会話が可能です。</div>
-                </div>
-                <div class="grid-item plugin-item">
-                    <div class="item-title plugin-title">Multiverse-Core</div>
-                    <div class="item-desc">複数の独立したワールドを管理。メインサバイバルと採掘専用ワールドを分けて運用。</div>
-                </div>
-                <div class="grid-item plugin-item">
-                    <div class="item-title plugin-title">Multiverse-Portals</div>
-                    <div class="item-desc">ゲートに入るだけでコマンド不要で別ワールドへ簡単に移動できるポータル機能。</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2>🗺️ ワールド案内 (Multiverse & Portals)</h2>
-            <div class="grid-container">
-                <div class="grid-item world-item">
-                    <div class="world-icon">🏠</div>
-                    <div class="item-title">メインワールド</div>
-                    <div class="item-desc">建築＆生活の拠点</div>
-                </div>
-                <div class="grid-item world-item">
-                    <div class="world-icon">⛏️</div>
-                    <div class="item-title">資源ワールド</div>
-                    <div class="item-desc">定期リセットで採掘し放題</div>
-                </div>
-                <div class="grid-item world-item">
-                    <div class="world-icon">🌌</div>
-                    <div class="item-title">ネザー / エンド</div>
-                    <div class="item-desc">探検・冒険エリア</div>
-                </div>
-            </div>
-        </div>
-
     </div>
 
-    <footer>
-        &copy; 2026 しゅんのサバイバルサーバー | Server IP: atoms-jail.tun.ply.gg
-    </footer>
-
-    <!-- 通知トースト -->
-    <div id="toast"></div>
-
     <script>
-        /* --- IPコピー機能 --- */
+        // 【機能2の裏側】IPコピー処理
         function copyIP() {
-            const ip = "atoms-jail.tun.ply.gg";
-            navigator.clipboard.writeText(ip).then(() => {
-                showToast("IPアドレスをコピーしました！");
-            }).catch(() => alert("コピーに失敗しました: " + ip));
+            navigator.clipboard.writeText("{{ server_ip }}");
+            const badge = document.getElementById("copyBadge");
+            badge.innerText = "コピーしました！";
+            badge.classList.replace("bg-success", "bg-primary");
+            setTimeout(() => {
+                badge.innerText = "クリックでコピー";
+                badge.classList.replace("bg-primary", "bg-success");
+            }, 2000);
         }
 
-        /* --- トースト通知表示 --- */
-        function showToast(message) {
-            const toast = document.getElementById("toast");
-            toast.textContent = message;
-            toast.className = "show";
-            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 2500);
-        }
+        // 【機能3・4の裏側】ステータス自動更新処理
+        async function fetchStatus() {
+            try {
+                const res = await fetch('/api/status');
+                const data = await res.json();
+                
+                const statusEl = document.getElementById('statusText');
+                if (data.online) {
+                    statusEl.innerHTML = '<span class="status-online">● 稼働中</span>';
+                    document.getElementById('playerCount').innerText = `${data.players_online} / ${data.players_max} 人`;
+                    document.getElementById('serverVersion').innerText = data.version;
+                    document.getElementById('serverMotd').innerText = data.motd;
 
-        /* --- サーバー状態切り替え --- */
-        function setStatus(type) {
-            const badge = document.getElementById("serverStatusBadge");
-            const msg = document.getElementById("statusMessage");
-
-            if (type === 'online') {
-                badge.className = "status-badge status-online";
-                badge.textContent = "🟢 オンライン稼働中";
-                msg.textContent = "現在サーバーは正常に稼働しています。どなたでもご自由に参加いただけます！";
-            } else if (type === 'maintenance') {
-                badge.className = "status-badge status-maintenance";
-                badge.textContent = "🟡 メンテナンス中";
-                msg.textContent = "現在サーバーはメンテナンス中です。作業完了までしばらくお待ちください。";
-            } else if (type === 'offline') {
-                badge.className = "status-badge status-offline";
-                badge.textContent = "🔴 オフライン";
-                msg.textContent = "現在サーバーは停止中です。再開予定はDiscordにてお知らせします。";
+                    const listEl = document.getElementById('playerList');
+                    if (data.player_list && data.player_list.length > 0) {
+                        listEl.innerHTML = data.player_list.map(p => `<span class="badge bg-secondary border border-light"><i class="bi bi-person-fill"></i> ${p}</span>`).join('');
+                    } else {
+                        listEl.innerHTML = '<span class="text-muted small">現在ログイン中のプレイヤーはいません</span>';
+                    }
+                } else {
+                    statusEl.innerHTML = '<span class="status-offline">● 停止中</span>';
+                    document.getElementById('playerCount').innerText = '0 / 0';
+                    document.getElementById('playerList').innerHTML = '<span class="text-muted small">サーバーがオフラインです</span>';
+                }
+            } catch (err) {
+                document.getElementById('statusText').innerHTML = '<span class="status-offline">取得エラー</span>';
             }
         }
 
-        /* --- お知らせ動的追加機能 (ローカルストレージ連携) --- */
-        
-        // デフォルトのお知らせデータ
-        const defaultNews = [
-            { date: '2026-08-10', tag: 'tag-info', text: 'サーバーの公式Webページを公開しました！' },
-            { date: '2026-08-08', tag: 'tag-event', text: '今週末、エンドラ討伐イベントを開催予定です。詳細はDiscordにて！' },
-            { date: '2026-08-01', tag: 'tag-update', text: '資源ワールドを毎月恒例のリセットしました。' }
-        ];
-
-        // ページ読み込み時に実行
-        window.onload = function() {
-            // 今日の日付をカレンダーのデフォルトにセット
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('newsDate').value = today;
-            
-            // ローカルストレージからデータを読み込んで表示
-            loadNews();
-        };
-
-        function loadNews() {
-            const savedData = localStorage.getItem('shunServerNews');
-            const newsArray = savedData ? JSON.parse(savedData) : defaultNews;
-            renderNewsList(newsArray);
-        }
-
-        function renderNewsList(newsArray) {
-            const list = document.getElementById('newsList');
-            list.innerHTML = ''; // 一旦リストを空にする
-
-            newsArray.forEach(item => {
-                // タグのラベル文字を判定
-                let tagLabel = 'お知らせ';
-                if (item.tag === 'tag-update') tagLabel = '更新情報';
-                if (item.tag === 'tag-event') tagLabel = 'イベント';
-
-                // 日付のハイフンをスラッシュに変換 (例: 2026-08-10 -> 2026/08/10)
-                const formattedDate = item.date.replace(/-/g, '/');
-
-                // HTML要素を作成して追加
-                const li = document.createElement('li');
-                li.className = 'news-item';
-                li.innerHTML = `
-                    <span class="news-date">${formattedDate}</span>
-                    <span class="news-tag ${item.tag}">${tagLabel}</span>
-                    <span class="news-text">${item.text}</span>
-                `;
-                list.appendChild(li);
-            });
-        }
-
-        function addNewNews() {
-            const dateInput = document.getElementById('newsDate').value;
-            const tagInput = document.getElementById('newsTag').value;
-            const textInput = document.getElementById('newsText').value;
-
-            if (!dateInput || !textInput.trim()) {
-                alert("日付と内容を両方入力してください。");
-                return;
-            }
-
-            // 現在のデータを取得
-            const savedData = localStorage.getItem('shunServerNews');
-            const newsArray = savedData ? JSON.parse(savedData) : [...defaultNews];
-
-            // 新しいお知らせを配列の先頭に追加
-            newsArray.unshift({
-                date: dateInput,
-                tag: tagInput,
-                text: textInput.trim()
-            });
-
-            // ローカルストレージに保存して再描画
-            localStorage.setItem('shunServerNews', JSON.stringify(newsArray));
-            renderNewsList(newsArray);
-            
-            // 入力欄をクリア
-            document.getElementById('newsText').value = '';
-            showToast("お知らせを追加しました！");
-        }
-
-        function resetNews() {
-            if (confirm("追加したお知らせをすべて削除し、初期状態に戻しますか？")) {
-                localStorage.removeItem('shunServerNews');
-                loadNews();
-                showToast("お知らせを初期化しました。");
-            }
-        }
+        // ページ読み込み時に実行し、その後30秒ごとに自動更新
+        fetchStatus();
+        setInterval(fetchStatus, 30000);
     </script>
 </body>
 </html>
