@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>しゅんのサバイバルサーバー 公式HP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #121212; color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .hero { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=1200') center/cover; padding: 80px 0; border-bottom: 3px solid #28a745; }
+        .card { background-color: #1e1e1e; border: 1px solid #333; color: #fff; margin-bottom: 20px; }
+        .status-online { color: #28a745; font-weight: bold; }
+        .status-offline { color: #dc3545; font-weight: bold; }
+        .ip-box { background: #2a2a2a; padding: 10px 20px; border-radius: 8px; border: 1px dashed #28a745; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <!-- 1. ヘッダーナビゲーション -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top border-bottom border-secondary">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-success" href="#">🌿 しゅんのサバイバル</a>
+            <div class="ms-auto">
+                <a href="{{ discord_url }}" target="_blank" class="btn btn-outline-primary btn-sm"><i class="bi bi-discord"></i> 公式Discord</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ヒーローセクション -->
+    <header class="hero text-center mb-5">
+        <div class="container">
+            <h1 class="display-4 fw-bold">しゅんのサバイバルサーバーへようこそ！</h1>
+            <p class="lead">自由度満点のサバイバルワールドで仲間と一緒に暮らそう！</p>
+            
+            <!-- 2. ワンクリックIPコピー -->
+            <div class="d-inline-block mt-3">
+                <div class="ip-box" onclick="copyIP()">
+                    <span class="me-2"><i class="bi bi-terminal"></i> IP: <strong id="serverIP">{{ server_ip }}</strong></span>
+                    <span class="badge bg-success" id="copyBadge">クリックでコピー</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="row">
+            <!-- メインコンテンツ -->
+            <div class="col-lg-8">
+                
+                <!-- 3. リアルタイムステータスモニター -->
+                <div class="card p-4">
+                    <h3 class="h5 border-bottom pb-2"><i class="bi bi-activity"></i> サーバーリアルタイム状態</h3>
+                    <div class="row text-center mt-3">
+                        <div class="col-md-3">
+                            <h6>ステータス</h6>
+                            <p id="statusText" class="fs-5">取得中...</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h6>オンライン人数</h6>
+                            <p id="playerCount" class="fs-5">- / -</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h6>バージョン</h6>
+                            <p id="serverVersion" class="fs-5">-</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h6>MOTD</h6>
+                            <p id="serverMotd" class="small text-muted">-</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. オンラインプレイヤー一覧 -->
+                <div class="card p-4">
+                    <h3 class="h5 border-bottom pb-2"><i class="bi bi-people"></i> 現在参加中のプレイヤー</h3>
+                    <ul id="playerList" class="list-group list-group-flush mt-2">
+                        <li class="list-group-item bg-transparent text-muted">取得中...</li>
+                    </ul>
+                </div>
+
+                <!-- 5. 参加方法ガイド -->
+                <div class="card p-4">
+                    <h3 class="h5 border-bottom pb-2"><i class="bi bi-controller"></i> サーバー参加手順</h3>
+                    <ol class="mt-2">
+                        <li>Minecraft Java Edition を起動</li>
+                        <li>「マルチプレイ」 ➔ 「サーバーを追加」をクリック</li>
+                        <li>サーバーアドレスに <code>{{ server_ip }}</code> を入力して完了！</li>
+                    </ol>
+                </div>
+
+                <!-- 6. サーバー独自機能・システム紹介 -->
+                <div class="card p-4">
+                    <h3 class="h5 border-bottom pb-2"><i class="bi bi-star"></i> 主なサーバー機能</h3>
+                    <div class="row g-3 mt-1">
+                        <div class="col-md-6"><i class="bi bi-shield-check text-success"></i> 土地保護プラグイン搭載</div>
+                        <div class="col-md-6"><i class="bi bi-cash-coin text-warning"></i> プレイヤー間経済システム</div>
+                        <div class="col-md-6"><i class="bi bi-shop text-info"></i> 自家ショップ作成可能</div>
+                        <div class="col-md-6"><i class="bi bi-tree text-primary"></i> 一括破壊・木こり機能</div>
+                    </div>
+                </div>
+
+                <!-- 7. サーバー規約 & ニュース -->
+                <div class="card p-4">
+                    <h3 class="h5 border-bottom pb-2"><i class="bi bi-exclamation-triangle"></i> サーバー規約・お知らせ</h3>
+                    <ul class="mb-0">
+                        <li>他人の建造物の破壊・窃盗行為は厳禁です。</li>
+                        <li>チートMODや悪質なバグ利用は即座にBAN対象となります。</li>
+                        <li>皆で楽しく遊ぶためにマナーを守りましょう！</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- サイドバー -->
+            <div class="col-lg-4">
+                
+                <!-- 8. Discord コミュニティリンク widget -->
+                <div class="card p-4 text-center">
+                    <h4 class="h5"><i class="bi bi-discord text-primary"></i> 公式Discord</h4>
+                    <p class="small text-muted">イベント情報やお問い合わせ、仲間との通話はこちら！</p>
+                    <a href="{{ discord_url }}" target="_blank" class="btn btn-primary w-100">Discordに参加する</a>
+                </div>
+
+                <!-- 9. 運営チーム一覧 -->
+                <div class="card p-4">
+                    <h4 class="h5 border-bottom pb-2"><i class="bi bi-person-badge"></i> 運営メンバー</h4>
+                    <ul class="list-unstyled mb-0">
+                        <li>👑 <strong>しゅん (Shun)</strong> - サーバー主</li>
+                        <li>🛡️ <strong>Mod Team</strong> - モデレーター募集枠</li>
+                    </ul>
+                </div>
+
+                <!-- 10. Webマップ / 関連リンク -->
+                <div class="card p-4">
+                    <h4 class="h5 border-bottom pb-2"><i class="bi bi-map"></i> 関連リンク</h4>
+                    <a href="#" class="btn btn-outline-light btn-sm w-100 mb-2 disabled">Dynmap (準備中)</a>
+                    <a href="#" class="btn btn-outline-light btn-sm w-100 disabled">公式Wiki (準備中)</a>
+                </div>
+
+                <!-- 11. FAQ / よくある質問 -->
+                <div class="card p-4">
+                    <h4 class="h5 border-bottom pb-2"><i class="bi bi-question-circle"></i> FAQ</h4>
+                    <p class="small mb-1"><strong>Q. 統合版(Switch/スマホ)から入れますか？</strong></p>
+                    <p class="small text-muted">A. 現在Java版対応ですが、詳細設定はDiscordで案内中です。</p>
+                </div>
+
+                <!-- 12. 投票・支援リンク -->
+                <div class="card p-4 text-center">
+                    <h4 class="h5"><i class="bi bi-heart-fill text-danger"></i> サーバー応援</h4>
+                    <p class="small text-muted">JAPAN MINECRAFT MONSTERSでの投票をお願いします！</p>
+                    <button class="btn btn-outline-warning btn-sm w-100" onclick="alert('投票リンク準備中！')">JMMで投票する</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // IPコピー機能
+        function copyIP() {
+            navigator.clipboard.writeText("{{ server_ip }}");
+            document.getElementById("copyBadge").innerText = "コピーしました！";
+            setTimeout(() => {
+                document.getElementById("copyBadge").innerText = "クリックでコピー";
+            }, 2000);
+        }
+
+        // バックエンドからステータス取得
+        async function fetchStatus() {
+            try {
+                const res = await fetch('/api/status');
+                const data = await res.json();
+                
+                const statusEl = document.getElementById('statusText');
+                if (data.online) {
+                    statusEl.innerHTML = '<span class="status-online">● オンライン</span>';
+                    document.getElementById('playerCount').innerText = `${data.players_online} / ${data.players_max}`;
+                    document.getElementById('serverVersion').innerText = data.version;
+                    document.getElementById('serverMotd').innerText = data.motd;
+
+                    // プレイヤーリスト更新
+                    const listEl = document.getElementById('playerList');
+                    if (data.player_list && data.player_list.length > 0) {
+                        listEl.innerHTML = data.player_list.map(p => `<li class="list-group-item bg-transparent text-white"><i class="bi bi-person"></i> ${p}</li>`).join('');
+                    } else {
+                        listEl.innerHTML = '<li class="list-group-item bg-transparent text-muted">現在ログイン中のプレイヤーはいません</li>';
+                    }
+                } else {
+                    statusEl.innerHTML = '<span class="status-offline">● オフライン</span>';
+                    document.getElementById('playerCount').innerText = '0 / 0';
+                    document.getElementById('playerList').innerHTML = '<li class="list-group-item bg-transparent text-muted">サーバーが停止中です</li>';
+                }
+            } catch (err) {
+                document.getElementById('statusText').innerHTML = '<span class="status-offline">取得失敗</span>';
+            }
+        }
+
+        fetchStatus();
+        setInterval(fetchStatus, 30000); // 30秒ごとに更新
+    </script>
+</body>
+</html>
