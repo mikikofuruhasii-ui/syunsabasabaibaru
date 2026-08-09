@@ -5,18 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>しゅんのサバイバルサーバー</title>
     <style>
-        /* 全体のリセットと基本設定 */
-        * {
-            box-sizing: border-box;
-        }
-
+        /* =========================================
+           全体のデザイン設定（ダークテーマ）
+        ========================================= */
+        * { box-sizing: border-box; }
         body {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             font-family: 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
-            background-color: #121216;
-            color: #e2e8f0;
-            line-height: 1.6;
+            background-color: #121216; color: #e2e8f0; line-height: 1.6;
         }
 
         /* ヘッダー */
@@ -28,268 +24,98 @@
             border-bottom: 4px solid #22c55e;
             box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
-
         h1 {
-            color: #ffffff;
-            font-size: 2.8em;
-            margin: 0 0 10px 0;
-            letter-spacing: 1px;
-            text-shadow: 0 2px 10px rgba(34, 197, 94, 0.3);
+            color: #ffffff; font-size: 2.8em; margin: 0 0 10px 0;
+            letter-spacing: 1px; text-shadow: 0 2px 10px rgba(34, 197, 94, 0.3);
         }
+        .subtitle { font-size: 1.1em; color: #86efac; margin-bottom: 30px; font-weight: 500; }
 
-        .subtitle {
-            font-size: 1.1em;
-            color: #86efac;
-            margin-bottom: 30px;
-            font-weight: 500;
-        }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        /* アクションボタン */
-        .btn-group {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-
+        /* ボタン群 */
+        .btn-group { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; }
         .btn {
-            padding: 14px 28px;
-            font-size: 1.05em;
-            font-weight: bold;
-            color: #ffffff;
-            background-color: #22c55e;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            padding: 14px 28px; font-size: 1.05em; font-weight: bold; color: #ffffff;
+            background-color: #22c55e; border: none; border-radius: 8px; cursor: pointer;
+            text-decoration: none; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 8px;
         }
+        .btn:hover { background-color: #16a34a; transform: translateY(-2px); }
+        .btn-discord { background-color: #5865f2; }
+        .btn-discord:hover { background-color: #4752c4; }
 
-        .btn:hover {
-            background-color: #16a34a;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(34, 197, 94, 0.4);
-        }
-
-        .btn-discord {
-            background-color: #5865f2;
-            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
-        }
-
-        .btn-discord:hover {
-            background-color: #4752c4;
-            box-shadow: 0 6px 16px rgba(88, 101, 242, 0.4);
-        }
-
-        /* 共通カードデザイン */
+        /* カードデザイン */
         .card {
-            background-color: #1e1e24;
-            padding: 24px;
-            border-radius: 12px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            border: 1px solid #2a2a35;
+            background-color: #1e1e24; padding: 24px; border-radius: 12px;
+            margin-bottom: 24px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); border: 1px solid #2a2a35;
         }
-
         .card h2 {
-            margin-top: 0;
-            color: #4ade80;
-            font-size: 1.4em;
-            border-bottom: 2px solid #2a2a35;
-            padding-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            margin-top: 0; color: #4ade80; font-size: 1.4em; border-bottom: 2px solid #2a2a35;
+            padding-bottom: 10px; display: flex; align-items: center; gap: 10px;
         }
 
-        /* お知らせ機能 (NEW) */
-        .news-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .news-item {
-            padding: 12px 0;
-            border-bottom: 1px dashed #333;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .news-item:last-child {
-            border-bottom: none;
-        }
-
-        .news-date {
-            color: #9ca3af;
-            font-size: 0.9em;
-            min-width: 90px;
-        }
-
-        .news-tag {
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.8em;
-            font-weight: bold;
-        }
-
-        .tag-info { background-color: #1e3a8a; color: #93c5fd; }
-        .tag-update { background-color: #064e3b; color: #6ee7b7; }
-        .tag-event { background-color: #701a75; color: #f0abfc; }
-
-        .news-text {
-            color: #e2e8f0;
-            flex: 1;
-        }
-
-        /* サーバーリアルタイム情報 */
+        /* サーバー状態バッジ */
         .status-badge {
-            display: inline-block;
-            padding: 6px 16px;
-            font-weight: bold;
-            border-radius: 20px;
-            font-size: 0.9em;
-            transition: all 0.3s ease;
+            display: inline-block; padding: 6px 16px; font-weight: bold;
+            border-radius: 20px; font-size: 0.9em; transition: all 0.3s ease;
         }
-
         .status-online { background-color: #166534; color: #4ade80; border: 1px solid #22c55e; }
         .status-maintenance { background-color: #854d0e; color: #fde047; border: 1px solid #eab308; }
         .status-offline { background-color: #991b1b; color: #fca5a5; border: 1px solid #ef4444; }
 
+        /* お知らせリスト */
+        .news-list { list-style: none; padding: 0; margin: 0; }
+        .news-item { padding: 12px 0; border-bottom: 1px dashed #333; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .news-item:last-child { border-bottom: none; }
+        .news-date { color: #9ca3af; font-size: 0.9em; min-width: 90px; }
+        .news-tag { padding: 2px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; }
+        .tag-info { background-color: #1e3a8a; color: #93c5fd; }
+        .tag-update { background-color: #064e3b; color: #6ee7b7; }
+        .tag-event { background-color: #701a75; color: #f0abfc; }
+        .news-text { color: #e2e8f0; flex: 1; }
+
+        /* 管理者パネル (ステータス変更 ＆ お知らせ追加) */
         .admin-panel {
-            background-color: #18181c;
-            border: 1px dashed #4b5563;
-            padding: 16px;
-            border-radius: 8px;
-            margin-top: 15px;
+            background-color: #18181c; border: 1px dashed #4b5563;
+            padding: 16px; border-radius: 8px; margin-top: 25px;
         }
-
-        .admin-panel label {
-            font-size: 0.9em;
-            color: #9ca3af;
-            display: block;
-            margin-bottom: 8px;
+        .admin-panel h3 { color: #9ca3af; font-size: 1.1em; margin: 0 0 15px 0; display: flex; align-items: center; gap: 5px; }
+        .admin-section { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #2a2a35; }
+        .admin-section:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        
+        .admin-input {
+            padding: 8px; background-color: #27272a; border: 1px solid #4b5563;
+            color: #fff; border-radius: 4px; font-family: inherit; font-size: 0.9em;
         }
-
-        .status-btn-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+        .admin-input:focus { outline: none; border-color: #3b82f6; }
+        
+        .status-btn-group { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .admin-btn {
+            padding: 8px 16px; font-size: 0.9em; border-radius: 6px; border: none;
+            background-color: #3f3f46; color: #fff; cursor: pointer; transition: 0.2s; font-weight: bold;
         }
+        .admin-btn:hover { background-color: #52525b; }
+        .btn-add { background-color: #2563eb; } .btn-add:hover { background-color: #1d4ed8; }
+        .btn-reset { background-color: #dc2626; } .btn-reset:hover { background-color: #b91c1c; }
 
-        .status-btn {
-            padding: 6px 14px;
-            font-size: 0.85em;
-            border-radius: 6px;
-            border: 1px solid #4b5563;
-            background-color: #27272a;
-            color: #ccc;
-            cursor: pointer;
-            transition: 0.2s;
-        }
+        /* プラグイン & ワールドリスト */
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-top: 15px; }
+        .grid-item { background: #252530; padding: 16px; border-radius: 8px; }
+        .plugin-item { border-left: 4px solid #3b82f6; }
+        .world-item { text-align: center; border: 1px solid #333; }
+        .item-title { font-weight: bold; color: #f3f4f6; font-size: 1.1em; margin-bottom: 6px; }
+        .plugin-title { color: #60a5fa; }
+        .item-desc { font-size: 0.9em; color: #9ca3af; }
+        .world-icon { font-size: 1.8em; margin-bottom: 4px; }
 
-        .status-btn:hover { background-color: #3f3f46; color: #fff; }
-
-        /* プラグインリスト */
-        .plugin-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .plugin-item {
-            background: #252530;
-            padding: 16px;
-            border-radius: 8px;
-            border-left: 4px solid #3b82f6;
-        }
-
-        .plugin-name {
-            font-weight: bold;
-            color: #60a5fa;
-            font-size: 1.1em;
-            margin-bottom: 6px;
-        }
-
-        .plugin-desc {
-            font-size: 0.9em;
-            color: #9ca3af;
-        }
-
-        /* ワールドマップ一覧 */
-        .world-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px;
-            margin-top: 15px;
-        }
-
-        .world-card {
-            background-color: #252530;
-            padding: 14px;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid #333;
-        }
-
-        .world-icon {
-            font-size: 1.8em;
-            margin-bottom: 4px;
-        }
-
-        .world-title {
-            font-weight: bold;
-            color: #f3f4f6;
-        }
-
-        /* フッター */
-        footer {
-            text-align: center;
-            padding: 24px;
-            background-color: #0b0b0e;
-            color: #6b7280;
-            font-size: 0.85em;
-            border-top: 1px solid #1f1f2e;
-        }
+        footer { text-align: center; padding: 24px; background-color: #0b0b0e; color: #6b7280; font-size: 0.85em; }
 
         /* 通知トースト */
         #toast {
-            visibility: hidden;
-            min-width: 250px;
-            background-color: #1e293b;
-            color: #fff;
-            text-align: center;
-            border-radius: 8px;
-            padding: 14px 20px;
-            position: fixed;
-            z-index: 100;
-            left: 50%;
-            bottom: 30px;
-            transform: translateX(-50%);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
-            border: 1px solid #22c55e;
-            font-weight: 500;
+            visibility: hidden; min-width: 250px; background-color: #1e293b; color: #fff; text-align: center;
+            border-radius: 8px; padding: 14px 20px; position: fixed; z-index: 100; left: 50%; bottom: 30px;
+            transform: translateX(-50%); border: 1px solid #22c55e; font-weight: bold;
         }
-
-        #toast.show {
-            visibility: visible;
-            animation: fadein 0.3s, fadeout 0.5s 2.2s;
-        }
-
+        #toast.show { visibility: visible; animation: fadein 0.3s, fadeout 0.5s 2.2s; }
         @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 30px; opacity: 1; } }
         @keyframes fadeout { from { bottom: 30px; opacity: 1; } to { bottom: 0; opacity: 0; } }
     </style>
@@ -308,29 +134,19 @@
 
     <div class="container">
         
-        <!-- NEW: お知らせセクション -->
+        <!-- ==============================================
+             お知らせセクション（JavaScriptで動的に生成）
+        =============================================== -->
         <div class="card">
             <h2>📢 最新のお知らせ</h2>
-            <ul class="news-list">
-                <li class="news-item">
-                    <span class="news-date">2026/08/10</span>
-                    <span class="news-tag tag-info">お知らせ</span>
-                    <span class="news-text">サーバーの公式Webページを公開しました！</span>
-                </li>
-                <li class="news-item">
-                    <span class="news-date">2026/08/08</span>
-                    <span class="news-tag tag-event">イベント</span>
-                    <span class="news-text">今週末、エンドラ討伐イベントを開催予定です。詳細はDiscordにて！</span>
-                </li>
-                <li class="news-item">
-                    <span class="news-date">2026/08/01</span>
-                    <span class="news-tag tag-update">更新情報</span>
-                    <span class="news-text">資源ワールドを毎月恒例のリセットしました。</span>
-                </li>
+            <ul class="news-list" id="newsList">
+                <!-- ここにJavaScriptでお知らせが追加されます -->
             </ul>
         </div>
 
-        <!-- リアルタイムステータス ＆ 切り替えコントローラー -->
+        <!-- ==============================================
+             サーバー状態 ＆ 管理者コントロールパネル
+        =============================================== -->
         <div class="card">
             <h2>📡 サーバーリアルタイム情報</h2>
             <p><strong>接続アドレス:</strong> <code style="background:#27272a; padding:3px 8px; border-radius:4px; color:#a7f3d0;">atoms-jail.tun.ply.gg</code></p>
@@ -343,55 +159,76 @@
                 現在サーバーは正常に稼働しています。どなたでもご自由に参加いただけます！
             </p>
 
-            <!-- 状態変更パネル（コントロール用） -->
+            <!-- 管理者用パネル（お知らせ追加 ＆ ステータス変更） -->
             <div class="admin-panel">
-                <label>⚙️ ステータス切り替えテスト（表示の確認用）:</label>
-                <div class="status-btn-group">
-                    <button class="status-btn" onclick="setStatus('online')">🟢 オンライン</button>
-                    <button class="status-btn" onclick="setStatus('maintenance')">🟡 メンテナンス中</button>
-                    <button class="status-btn" onclick="setStatus('offline')">🔴 オフライン</button>
+                <h3>🛠️ 管理者コントロールパネル</h3>
+                
+                <!-- 機能1: ステータス変更 -->
+                <div class="admin-section">
+                    <label style="color:#9ca3af; font-size:0.9em; display:block; margin-bottom:8px;">サーバー状態の切り替え:</label>
+                    <div class="status-btn-group">
+                        <button class="admin-btn" onclick="setStatus('online')">🟢 オンライン</button>
+                        <button class="admin-btn" onclick="setStatus('maintenance')">🟡 メンテナンス</button>
+                        <button class="admin-btn" onclick="setStatus('offline')">🔴 オフライン</button>
+                    </div>
+                </div>
+
+                <!-- 機能2: お知らせ追加フォーム -->
+                <div class="admin-section">
+                    <label style="color:#9ca3af; font-size:0.9em; display:block; margin-bottom:8px;">お知らせの追加 (※お使いのブラウザに保存されます):</label>
+                    <div class="status-btn-group">
+                        <input type="date" id="newsDate" class="admin-input">
+                        <select id="newsTag" class="admin-input">
+                            <option value="tag-info">お知らせ</option>
+                            <option value="tag-update">更新情報</option>
+                            <option value="tag-event">イベント</option>
+                        </select>
+                        <input type="text" id="newsText" class="admin-input" placeholder="お知らせの内容を入力..." style="flex: 1; min-width: 200px;">
+                        <button class="admin-btn btn-add" onclick="addNewNews()">＋ 追加</button>
+                        <button class="admin-btn btn-reset" onclick="resetNews()">リセット</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 導入プラグイン3種 -->
+        <!-- ==============================================
+             プラグイン & ワールド紹介
+        =============================================== -->
         <div class="card">
             <h2>🔌 導入プラグイン (3選)</h2>
-            <div class="plugin-grid">
-                <div class="plugin-item">
-                    <div class="plugin-name">DiscordSRV</div>
-                    <div class="plugin-desc">マイクラ内のゲームチャットと公式Discordがリアルタイム連携！ゲーム外からでも仲間と会話が可能です。</div>
+            <div class="grid-container">
+                <div class="grid-item plugin-item">
+                    <div class="item-title plugin-title">DiscordSRV</div>
+                    <div class="item-desc">ゲーム内チャットとDiscordが連携！ゲーム外からでも仲間と会話が可能です。</div>
                 </div>
-                <div class="plugin-item">
-                    <div class="plugin-name">Multiverse-Core</div>
-                    <div class="plugin-desc">複数の独立したワールドを安全に管理。メインサバイバルと採掘専用ワールドを分けて運用しています。</div>
+                <div class="grid-item plugin-item">
+                    <div class="item-title plugin-title">Multiverse-Core</div>
+                    <div class="item-desc">複数の独立したワールドを管理。メインサバイバルと採掘専用ワールドを分けて運用。</div>
                 </div>
-                <div class="plugin-item">
-                    <div class="plugin-name">Multiverse-Portals</div>
-                    <div class="plugin-desc">ゲーム内に設置されたポータル（ゲート）に入るだけで、コマンドなしで別ワールドへ簡単に移動できます。</div>
+                <div class="grid-item plugin-item">
+                    <div class="item-title plugin-title">Multiverse-Portals</div>
+                    <div class="item-desc">ゲートに入るだけでコマンド不要で別ワールドへ簡単に移動できるポータル機能。</div>
                 </div>
             </div>
         </div>
 
-        <!-- ワールド＆環境案内マップ -->
         <div class="card">
             <h2>🗺️ ワールド案内 (Multiverse & Portals)</h2>
-            <p style="font-size: 0.9em; color:#9ca3af;">専用ポータルを使って以下のワールドを自由に行き来できます：</p>
-            <div class="world-grid">
-                <div class="world-card">
+            <div class="grid-container">
+                <div class="grid-item world-item">
                     <div class="world-icon">🏠</div>
-                    <div class="world-title">メインワールド</div>
-                    <div style="font-size:0.8em; color:#aaa;">建築＆生活の拠点</div>
+                    <div class="item-title">メインワールド</div>
+                    <div class="item-desc">建築＆生活の拠点</div>
                 </div>
-                <div class="world-card">
+                <div class="grid-item world-item">
                     <div class="world-icon">⛏️</div>
-                    <div class="world-title">資源ワールド</div>
-                    <div style="font-size:0.8em; color:#aaa;">定期リセットで採掘し放題</div>
+                    <div class="item-title">資源ワールド</div>
+                    <div class="item-desc">定期リセットで採掘し放題</div>
                 </div>
-                <div class="world-card">
+                <div class="grid-item world-item">
                     <div class="world-icon">🌌</div>
-                    <div class="world-title">ネザー / エンド</div>
-                    <div style="font-size:0.8em; color:#aaa;">探検・冒険エリア</div>
+                    <div class="item-title">ネザー / エンド</div>
+                    <div class="item-desc">探検・冒険エリア</div>
                 </div>
             </div>
         </div>
@@ -402,25 +239,27 @@
         &copy; 2026 しゅんのサバイバルサーバー | Server IP: atoms-jail.tun.ply.gg
     </footer>
 
-    <!-- IPコピー時の通知トースト -->
-    <div id="toast">IPアドレスをコピーしました！</div>
+    <!-- 通知トースト -->
+    <div id="toast"></div>
 
     <script>
-        // IPコピー機能
+        /* --- IPコピー機能 --- */
         function copyIP() {
             const ip = "atoms-jail.tun.ply.gg";
             navigator.clipboard.writeText(ip).then(() => {
-                const toast = document.getElementById("toast");
-                toast.className = "show";
-                setTimeout(() => { 
-                    toast.className = toast.className.replace("show", ""); 
-                }, 2500);
-            }).catch(() => {
-                alert("コピーに失敗しました。手動でコピーしてください: " + ip);
-            });
+                showToast("IPアドレスをコピーしました！");
+            }).catch(() => alert("コピーに失敗しました: " + ip));
         }
 
-        // ステータス変更機能
+        /* --- トースト通知表示 --- */
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.className = "show";
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 2500);
+        }
+
+        /* --- サーバー状態切り替え --- */
         function setStatus(type) {
             const badge = document.getElementById("serverStatusBadge");
             const msg = document.getElementById("statusMessage");
@@ -437,6 +276,94 @@
                 badge.className = "status-badge status-offline";
                 badge.textContent = "🔴 オフライン";
                 msg.textContent = "現在サーバーは停止中です。再開予定はDiscordにてお知らせします。";
+            }
+        }
+
+        /* --- お知らせ動的追加機能 (ローカルストレージ連携) --- */
+        
+        // デフォルトのお知らせデータ
+        const defaultNews = [
+            { date: '2026-08-10', tag: 'tag-info', text: 'サーバーの公式Webページを公開しました！' },
+            { date: '2026-08-08', tag: 'tag-event', text: '今週末、エンドラ討伐イベントを開催予定です。詳細はDiscordにて！' },
+            { date: '2026-08-01', tag: 'tag-update', text: '資源ワールドを毎月恒例のリセットしました。' }
+        ];
+
+        // ページ読み込み時に実行
+        window.onload = function() {
+            // 今日の日付をカレンダーのデフォルトにセット
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('newsDate').value = today;
+            
+            // ローカルストレージからデータを読み込んで表示
+            loadNews();
+        };
+
+        function loadNews() {
+            const savedData = localStorage.getItem('shunServerNews');
+            const newsArray = savedData ? JSON.parse(savedData) : defaultNews;
+            renderNewsList(newsArray);
+        }
+
+        function renderNewsList(newsArray) {
+            const list = document.getElementById('newsList');
+            list.innerHTML = ''; // 一旦リストを空にする
+
+            newsArray.forEach(item => {
+                // タグのラベル文字を判定
+                let tagLabel = 'お知らせ';
+                if (item.tag === 'tag-update') tagLabel = '更新情報';
+                if (item.tag === 'tag-event') tagLabel = 'イベント';
+
+                // 日付のハイフンをスラッシュに変換 (例: 2026-08-10 -> 2026/08/10)
+                const formattedDate = item.date.replace(/-/g, '/');
+
+                // HTML要素を作成して追加
+                const li = document.createElement('li');
+                li.className = 'news-item';
+                li.innerHTML = `
+                    <span class="news-date">${formattedDate}</span>
+                    <span class="news-tag ${item.tag}">${tagLabel}</span>
+                    <span class="news-text">${item.text}</span>
+                `;
+                list.appendChild(li);
+            });
+        }
+
+        function addNewNews() {
+            const dateInput = document.getElementById('newsDate').value;
+            const tagInput = document.getElementById('newsTag').value;
+            const textInput = document.getElementById('newsText').value;
+
+            if (!dateInput || !textInput.trim()) {
+                alert("日付と内容を両方入力してください。");
+                return;
+            }
+
+            // 現在のデータを取得
+            const savedData = localStorage.getItem('shunServerNews');
+            const newsArray = savedData ? JSON.parse(savedData) : [...defaultNews];
+
+            // 新しいお知らせを配列の先頭に追加
+            newsArray.unshift({
+                date: dateInput,
+                tag: tagInput,
+                text: textInput.trim()
+            });
+
+            // ローカルストレージに保存して再描画
+            localStorage.setItem('shunServerNews', JSON.stringify(newsArray));
+            renderNewsList(newsArray);
+            
+            // 入力欄をクリア
+            document.getElementById('newsText').value = '';
+            showToast("お知らせを追加しました！");
+        }
+
+        function resetNews() {
+            if (confirm("追加したお知らせをすべて削除し、初期状態に戻しますか？")) {
+                localStorage.removeItem('shunServerNews');
+                loadNews();
+                showToast("お知らせを初期化しました。");
             }
         }
     </script>
